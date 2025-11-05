@@ -423,3 +423,30 @@ Upgrade: Websocket 연결 지우너
 설정 체크리트스트
 
 host 헫헫
+
+
+location /api {
+    proxy_pass https://backend_server;
+    
+    # HTTP 버전 (WebSocket 지원)
+    proxy_http_version 1.1;
+    
+    # WebSocket 헤더
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    
+    # Host 헤더 (백엔드가 기대하는 값으로 설정)
+    proxy_set_header Host proxy1.aiserv.ktcloud.com;
+    
+    # 클라이언트 IP 정보
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    
+    # 프로토콜 정보
+    proxy_set_header X-Forwarded-Proto $scheme;
+    
+    # 추가 헤더 (선택사항)
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Port $server_port;
+}
+
